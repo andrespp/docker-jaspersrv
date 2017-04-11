@@ -6,10 +6,11 @@ setup_jasperserver() {
     DB_HOST=${DB_HOST:-localhost}
     DB_USER=${DB_USER:-postgres}
     DB_PASSWORD=${DB_PASSWORD:-postgres}
+    DB_NAME=${DB_NAME:-jasperserver}
 
     pushd /usr/src/jasperreports-server/buildomatic
     cp sample_conf/${DB_TYPE}_master.properties default_master.properties
-    sed -i -e "s|^appServerDir.*$|appServerDir = $CATALINA_HOME|g; s|^dbHost.*$|dbHost=$DB_HOST|g; s|^dbUsername.*$|dbUsername=$DB_USER|g; s|^dbPassword.*$|dbPassword=$DB_PASSWORD|g" default_master.properties
+    sed -i -e "s|^appServerDir.*$|appServerDir = $CATALINA_HOME|g; s|^dbHost.*$|dbHost=$DB_HOST|g; s|^dbUsername.*$|dbUsername=$DB_USER|g; s|^dbPassword.*$|dbPassword=$DB_PASSWORD|g; s|^# js\.dbName=.*|js.dbName=$DB_NAME|g" default_master.properties
 
     for i in $@; do
         ./js-ant $i
@@ -23,7 +24,9 @@ run_jasperserver() {
         setup_jasperserver deploy-webapp-ce
     fi
 
-    catalina.sh run
+    sed -i -e "s|^org.owasp.csrfguard.TokenName.*$|org.owasp.csrfguard.TokenName=JASPER-CSRF-TOKEN|g;" $CATALINA_HOME/webapps/jasperserver/WEB-INF/esapi/Owasp.CsrfGuard.properties
+
+    exec catalina.sh run
 }
 
 seed_database() {
