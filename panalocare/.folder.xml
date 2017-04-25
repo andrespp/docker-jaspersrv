@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<folder exportedWithPermissions="true">
+    <parent>/</parent>
+    <name>panalocare</name>
+    <label>panalocare</label>
+    <description></description>
+    <creationDate>2017-02-16T17:52:34.967Z</creationDate>
+    <updateDate>2017-02-16T17:52:34.967Z</updateDate>
+    <resource>panalocare_enrollment</resource>
+    <resource>panalocare_enrollment_summary</resource>
+</folder>

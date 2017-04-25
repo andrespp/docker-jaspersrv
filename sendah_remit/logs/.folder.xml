@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<folder exportedWithPermissions="true">
+    <parent>/sendah_remit</parent>
+    <name>logs</name>
+    <label>logs</label>
+    <description></description>
+    <creationDate>2016-08-05T06:20:18.571Z</creationDate>
+    <updateDate>2016-07-01T03:10:29.278Z</updateDate>
+    <resource>audit_logs</resource>
+    <resource>comprehensive_audit_logs</resource>
+</folder>

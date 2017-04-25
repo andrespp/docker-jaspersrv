@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inputControl exportedWithPermissions="true">
+    <folder>/Input_Controls</folder>
+    <name>start_datetime</name>
+    <version>1</version>
+    <label>Start Date/Time</label>
+    <description></description>
+    <creationDate>2016-11-10T02:05:24.163Z</creationDate>
+    <updateDate>2016-08-05T07:10:50.863Z</updateDate>
+    <type>2</type>
+    <mandatory>true</mandatory>
+    <readOnly>false</readOnly>
+    <visible>true</visible>
+    <dataType>
+        <localResource
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            exportedWithPermissions="false" xsi:type="dataType">
+            <folder>/Input_Controls/start_datetime_files</folder>
+            <name>start_datetime</name>
+            <version>1</version>
+            <label>start_datetime</label>
+            <description></description>
+            <creationDate>2016-11-10T02:05:24.163Z</creationDate>
+            <updateDate>2016-08-05T07:10:50.863Z</updateDate>
+            <type>4</type>
+            <strictMin>false</strictMin>
+            <strictMax>false</strictMax>
+        </localResource>
+    </dataType>
+</inputControl>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inputControl exportedWithPermissions="true">
+    <folder>/Input_Controls</folder>
+    <name>rh_partner</name>
+    <version>1</version>
+    <label>RH Partner</label>
+    <description></description>
+    <creationDate>2016-08-15T06:32:33.691Z</creationDate>
+    <updateDate>2016-08-12T09:49:22.957Z</updateDate>
+    <type>4</type>
+    <mandatory>true</mandatory>
+    <readOnly>false</readOnly>
+    <visible>true</visible>
+    <query>
+        <uri>/Input_Controls/Queries/list_of_rh_partners</uri>
+    </query>
+    <queryVisibleColumn>name</queryVisibleColumn>
+    <queryValueColumn>id</queryValueColumn>
+</inputControl>

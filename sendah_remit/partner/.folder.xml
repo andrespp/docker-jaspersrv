@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<folder exportedWithPermissions="true">
+    <parent>/sendah_remit</parent>
+    <name>partner</name>
+    <label>partner</label>
+    <description></description>
+    <creationDate>2016-06-20T06:45:39.927Z</creationDate>
+    <updateDate>2016-06-20T06:41:12.019Z</updateDate>
+    <resource>overall_transaction_register_cancelled</resource>
+    <resource>overall_transaction_register_cash_in</resource>
+    <resource>overall_transaction_register_cash_out</resource>
+</folder>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<folder exportedWithPermissions="true">
+    <parent>/Input_Controls</parent>
+    <name>Queries</name>
+    <label>Queries</label>
+    <description></description>
+    <creationDate>2016-06-15T12:42:18.687Z</creationDate>
+    <updateDate>2016-06-14T06:16:38.167Z</updateDate>
+    <resource>List_of_Branches</resource>
+    <resource>List_of_Brokers</resource>
+    <resource>list_of_distributors</resource>
+    <resource>list_of_identifiers</resource>
+    <resource>List_of_Partners</resource>
+    <resource>list_of_rh_partners</resource>
+    <resource>List_of_Underwriters</resource>
+    <resource>list_of_usernames</resource>
+    <resource>List_of_Users</resource>
+</folder>

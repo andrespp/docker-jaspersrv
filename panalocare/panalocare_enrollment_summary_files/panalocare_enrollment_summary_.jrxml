@@ -1,0 +1,602 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.2.1  -->
+<!-- 2017-02-17T03:42:07 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Panalocare Summary" pageWidth="665" pageHeight="612" orientation="Landscape" columnWidth="645" leftMargin="10" rightMargin="10" topMargin="20" bottomMargin="20" uuid="8a0f2ed7-bd69-47cf-8cce-eb2635e065ff">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="PanalocareDB"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="241"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="752"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="1000"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="0"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<parameter name="start_date" class="java.sql.Date"/>
+	<parameter name="end_date" class="java.sql.Date"/>
+	<parameter name="broker" class="java.lang.Integer">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+	</parameter>
+	<parameter name="underwriter" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT
+    DISTINCT ON (transaction.created_by)
+    transaction.created_by as agent_id,
+    COALESCE(panalocare.count, 0)::INTEGER as panalocare,
+    COALESCE(panalocare_new.count, 0)::INTEGER as panalocare_new,
+    COALESCE(panalocare_plus.count, 0)::INTEGER as panalocare_plus,
+    COALESCE(panalocare_plus_new.count, 0)::INTEGER as panalocare_plus_new,
+    COALESCE(panalocare_annual.count, 0)::INTEGER as panalocare_annual,
+    COALESCE(panalocare_annual_new.count, 0)::INTEGER as panalocare_annual_new,
+    COALESCE(panalocare_plus_annual.count, 0)::INTEGER as panalocare_plus_annual,
+    COALESCE(panalocare_plus_annual_new.count, 0)::INTEGER as panalocare_plus_annual_new
+FROM
+    api_transaction transaction
+    LEFT JOIN
+    (
+        SELECT
+            count(*) count,
+            transaction.created_by
+        FROM
+            api_transaction transaction
+            JOIN api_microinsurance microinsurance
+            ON transaction.microinsurance_id = microinsurance.id
+        WHERE
+            microinsurance.name = 'Panalocare'
+            AND transaction.date_created::DATE BETWEEN $P{start_date} AND $P{end_date}
+            AND (transaction.broker_id = $P{broker} OR microinsurance.underwriter_id = $P{underwriter})
+        GROUP BY
+            transaction.created_by
+    )panalocare
+    ON transaction.created_by = panalocare.created_by
+    LEFT JOIN
+    (
+        SELECT
+            count(first_transaction.id) as count,
+            transaction.created_by
+        FROM
+            api_transaction transaction,
+            (
+                SELECT
+                    DISTINCT ON (policy_id)
+                    policy_id,
+                    transaction.id
+                FROM
+                    api_transaction transaction
+                    JOIN api_microinsurance microinsurance
+                    ON transaction.microinsurance_id = microinsurance.id
+                WHERE
+                    microinsurance.name = 'Panalocare'
+                    AND transaction.date_created::DATE BETWEEN $P{start_date} AND $P{end_date}
+                    AND (transaction.broker_id = $P{broker} OR microinsurance.underwriter_id = $P{underwriter})
+            )first_transaction
+        WHERE
+            transaction.id = first_transaction.id
+            AND transaction.date_created::DATE BETWEEN $P{start_date} AND $P{end_date}
+        GROUP BY
+            transaction.created_by
+    )panalocare_new ON transaction.created_by = panalocare_new.created_by
+    LEFT JOIN
+    (
+        SELECT
+            count(*) count,
+            transaction.created_by
+        FROM
+            api_transaction transaction
+            JOIN api_microinsurance microinsurance
+            ON transaction.microinsurance_id = microinsurance.id
+        WHERE
+            microinsurance.name = 'Panalocare Plus'
+            AND transaction.date_created::DATE BETWEEN $P{start_date} AND $P{end_date}
+            AND (transaction.broker_id = $P{broker} OR microinsurance.underwriter_id = $P{underwriter})
+        GROUP BY
+            transaction.created_by
+    )panalocare_plus
+    ON transaction.created_by = panalocare_plus.created_by
+    LEFT JOIN
+    (
+        SELECT
+            count(first_transaction.id) as count,
+            transaction.created_by
+        FROM
+            api_transaction transaction,
+            (
+                SELECT
+                    DISTINCT ON (policy_id)
+                    policy_id,
+                    transaction.id
+                FROM
+                    api_transaction transaction
+                    JOIN api_microinsurance microinsurance
+                    ON transaction.microinsurance_id = microinsurance.id
+                WHERE
+                    microinsurance.name = 'Panalocare Plus'
+                    AND transaction.date_created::DATE BETWEEN $P{start_date} AND $P{end_date}
+                    AND (transaction.broker_id = $P{broker} OR microinsurance.underwriter_id = $P{underwriter})
+            )first_transaction
+        WHERE
+            transaction.policy_id = first_transaction.policy_id
+            AND transaction.date_created::DATE BETWEEN $P{start_date} AND $P{end_date}
+        GROUP BY
+            transaction.created_by
+    )panalocare_plus_new ON transaction.created_by = panalocare_plus_new.created_by
+    LEFT JOIN
+    (
+        SELECT
+            count(*) count,
+            transaction.created_by
+        FROM
+            api_transaction transaction
+            JOIN api_microinsurance microinsurance
+            ON transaction.microinsurance_id = microinsurance.id
+        WHERE
+            microinsurance.name = 'Panalocare Annual'
+            AND transaction.date_created::DATE BETWEEN $P{start_date} AND $P{end_date}
+            AND (transaction.broker_id = $P{broker} OR microinsurance.underwriter_id = $P{underwriter})
+        GROUP BY
+            transaction.created_by
+    )panalocare_annual
+    ON transaction.created_by = panalocare.created_by
+    LEFT JOIN
+    (
+        SELECT
+            count(first_transaction.id) as count,
+            transaction.created_by
+        FROM
+            api_transaction transaction,
+            (
+                SELECT
+                    DISTINCT ON (policy_id)
+                    policy_id,
+                    transaction.id
+                FROM
+                    api_transaction transaction
+                    JOIN api_microinsurance microinsurance
+                    ON transaction.microinsurance_id = microinsurance.id
+                WHERE
+                    microinsurance.name = 'Panalocare Annual'
+                    AND transaction.date_created::DATE BETWEEN $P{start_date} AND $P{end_date}
+                    AND (transaction.broker_id = $P{broker} OR microinsurance.underwriter_id = $P{underwriter})
+            )first_transaction
+        WHERE
+            transaction.policy_id = first_transaction.policy_id
+            AND transaction.date_created::DATE BETWEEN $P{start_date} AND $P{end_date}
+        GROUP BY
+            transaction.created_by
+    )panalocare_annual_new ON transaction.created_by = panalocare_annual_new.created_by
+    LEFT JOIN
+    (
+        SELECT
+            count(*) count,
+            transaction.created_by
+        FROM
+            api_transaction transaction
+            JOIN api_microinsurance microinsurance
+            ON transaction.microinsurance_id = microinsurance.id
+        WHERE
+            microinsurance.name = 'Panalocare Plus Annual'
+            AND transaction.date_created::DATE BETWEEN $P{start_date} AND $P{end_date}
+            AND (transaction.broker_id = $P{broker} OR microinsurance.underwriter_id = $P{underwriter})
+        GROUP BY
+            transaction.created_by
+    )panalocare_plus_annual
+    ON transaction.created_by = panalocare.created_by
+    LEFT JOIN
+    (
+        SELECT
+            count(first_transaction.id) as count,
+            transaction.created_by
+        FROM
+            api_transaction transaction,
+            (
+                SELECT
+                    DISTINCT ON (policy_id)
+                    policy_id,
+                    transaction.id
+                FROM
+                    api_transaction transaction
+                    JOIN api_microinsurance microinsurance
+                    ON transaction.microinsurance_id = microinsurance.id
+                WHERE
+                    microinsurance.name = 'Panalocare Plus Annual'
+                    AND transaction.date_created::DATE BETWEEN $P{start_date} AND $P{end_date}
+                    AND (transaction.broker_id = $P{broker} OR microinsurance.underwriter_id = $P{underwriter})
+            )first_transaction
+        WHERE
+            transaction.policy_id = first_transaction.policy_id
+            AND transaction.date_created::DATE BETWEEN $P{start_date} AND $P{end_date}
+        GROUP BY
+            transaction.created_by
+    )panalocare_plus_annual_new ON transaction.created_by = panalocare_plus_annual_new.created_by
+    JOIN api_microinsurance microinsurance
+    ON transaction.microinsurance_id = microinsurance.id
+WHERE
+    transaction.date_created::DATE BETWEEN $P{start_date} AND $P{end_date}
+    AND (transaction.broker_id = $P{broker} OR microinsurance.underwriter_id = $P{underwriter})]]>
+	</queryString>
+	<field name="agent_id" class="java.lang.String"/>
+	<field name="panalocare" class="java.lang.Long"/>
+	<field name="panalocare_new" class="java.lang.Long"/>
+	<field name="panalocare_plus" class="java.lang.Long"/>
+	<field name="panalocare_plus_new" class="java.lang.Long"/>
+	<field name="panalocare_annual" class="java.lang.Long"/>
+	<field name="panalocare_annual_new" class="java.lang.Long"/>
+	<field name="panalocare_plus_annual" class="java.lang.Long"/>
+	<field name="panalocare_plus_annual_new" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="36" splitType="Stretch">
+			<image>
+				<reportElement x="2" y="0" width="90" height="25" uuid="1fac5eb9-7b45-4417-9c3f-57fc9f70cd80">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<imageExpression><![CDATA["https://static.wixstatic.com/media/fbe18c_ef08535f95094714a1b7ea7b61fec260.png/v1/fill/w_243,h_65,al_c,usm_0.66_1.00_0.01/fbe18c_ef08535f95094714a1b7ea7b61fec260.png"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="2" y="26" width="90" height="10" uuid="9c5f87aa-90b7-47ed-87c1-ee2abdbe49fe">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement markup="none">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Declaration Date:"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="92" y="26" width="360" height="10" uuid="00e28085-b49e-4835-bd18-d6b2dc49380e"/>
+				<textElement markup="none">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[EQUALS($P{start_date}, $P{end_date})?$P{start_date}: "From " + $P{start_date} + " to " + $P{end_date}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="39" splitType="Stretch">
+			<staticText>
+				<reportElement key="" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="2" y="4" width="90" height="35" forecolor="#FFFFFF" backcolor="#1F497D" uuid="93f1bb23-dcf6-4cd7-aec6-72ccab9a933c"/>
+				<box padding="0">
+					<pen lineWidth="0.2" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Agent ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="" mode="Opaque" x="92" y="4" width="90" height="35" forecolor="#FFFFFF" backcolor="#1F497D" uuid="9a597cee-2916-42ce-b22e-7cf7ea187fde"/>
+				<box padding="0">
+					<pen lineWidth="0.2" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Name of Agent]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="" mode="Opaque" x="182" y="4" width="90" height="20" forecolor="#FFFFFF" backcolor="#0F243E" uuid="6294d600-e5b6-4b19-9e4f-2ecb44d39687">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box padding="0">
+					<pen lineWidth="0.2" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PanaloCare]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="" mode="Opaque" x="182" y="24" width="45" height="15" backcolor="#FFFFFF" uuid="cf82ddfb-bd5e-48cc-be06-74c28be51ea0">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box padding="0">
+					<pen lineWidth="0.2" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[New]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="" mode="Opaque" x="227" y="24" width="45" height="15" backcolor="#FFFFFF" uuid="1cc88918-980d-4c97-b79b-e62282972984">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box padding="0">
+					<pen lineWidth="0.2" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Renewal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="" mode="Opaque" x="272" y="4" width="90" height="20" forecolor="#FFFFFF" backcolor="#1F497D" uuid="6f886c9f-9d8d-4a45-948d-29d30e266be9">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box padding="0">
+					<pen lineWidth="0.2" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PanaloCare Plus]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="" mode="Opaque" x="272" y="24" width="45" height="15" backcolor="#FFFFFF" uuid="5e95f3c0-9d96-45fa-a9a0-cb3d0de91259"/>
+				<box padding="0">
+					<pen lineWidth="0.2" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[New]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="" mode="Opaque" x="317" y="24" width="45" height="15" backcolor="#FFFFFF" uuid="861a051e-7560-4697-879b-ab1067986bc6"/>
+				<box padding="0">
+					<pen lineWidth="0.2" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Renewal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="" mode="Opaque" x="362" y="4" width="90" height="20" forecolor="#FFFFFF" backcolor="#0F243E" uuid="87b2d4a7-8caf-4bb2-aee6-f04b2d80a6cb">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box padding="0">
+					<pen lineWidth="0.2" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PanaloCare Annual]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="" mode="Opaque" x="362" y="24" width="45" height="15" backcolor="#FFFFFF" uuid="2fd55838-7dda-4dfe-8925-66777d436218"/>
+				<box padding="0">
+					<pen lineWidth="0.2" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[New]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="" mode="Opaque" x="407" y="24" width="45" height="15" backcolor="#FFFFFF" uuid="2574bbb4-d44e-4162-a5fd-7f8bedcde5dd"/>
+				<box padding="0">
+					<pen lineWidth="0.2" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Renewal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="" mode="Opaque" x="452" y="4" width="90" height="20" forecolor="#FFFFFF" backcolor="#1F497D" uuid="1c6fc9eb-ee95-416f-88f3-6a41c448e827">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box padding="0">
+					<pen lineWidth="0.2" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PanaloCare Plus Annual]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="" mode="Opaque" x="452" y="24" width="45" height="15" backcolor="#FFFFFF" uuid="d8060ec9-71a8-4fca-9ef3-22cffea67b17"/>
+				<box padding="0">
+					<pen lineWidth="0.2" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[New]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="" mode="Opaque" x="497" y="24" width="45" height="15" backcolor="#FFFFFF" uuid="ec0aa2a2-656b-4a36-bbc6-470e133dedf7">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box padding="0">
+					<pen lineWidth="0.2" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Renewal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="" mode="Opaque" x="542" y="4" width="50" height="35" backcolor="#FFFFFF" uuid="4fda9c71-7816-45d6-96fd-65aefa4f9895">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box padding="0">
+					<pen lineWidth="0.2" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Client New]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="" mode="Opaque" x="592" y="4" width="50" height="35" backcolor="#FFFFFF" uuid="8336c32c-8837-4c9d-aeaa-ebd456ca0ef6">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box padding="0">
+					<pen lineWidth="0.2" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Client Renewal]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="10" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="92" y="0" width="90" height="10" uuid="24e10437-dd6e-426c-b9d3-a9758ca78303">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.2"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+			</textField>
+			<rectangle>
+				<reportElement stretchType="RelativeToBandHeight" x="3" y="0" width="639" height="10" backcolor="#DBE5F1" uuid="f633e4ac-d548-44cf-88b2-19b5ca0b8bfd">
+					<printWhenExpression><![CDATA[new Boolean( $V{PAGE_COUNT}.intValue() % 2 ==0 )]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="2" y="0" width="90" height="10" uuid="54f16f34-21f2-4490-97ed-2058cf07b0ae">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.2"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{agent_id}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="182" y="0" width="45" height="10" uuid="29cb39af-9871-4484-a873-dd1924fe42e7">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.2"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{panalocare_new}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="227" y="0" width="45" height="10" uuid="6a3bbd40-76c2-49f1-a764-8412ea268d85">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.2"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{panalocare} - $F{panalocare_new}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="272" y="0" width="45" height="10" uuid="a4366475-6697-41bc-b1a1-9289279ffadc">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.2"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{panalocare_plus_new}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="317" y="0" width="45" height="10" uuid="addee890-ab07-440e-a7a5-e3554c6d18b6">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.2"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{panalocare_plus} - $F{panalocare_plus_new}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="362" y="0" width="45" height="10" uuid="f0522703-ac7b-4025-a20c-ffd331ce06e7">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.2"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{panalocare_annual_new}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="452" y="0" width="45" height="10" uuid="74881f10-6990-441e-88c4-02e4d8da0abc">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.2"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{panalocare_plus_annual_new}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="497" y="0" width="45" height="10" uuid="28683877-3804-4d4e-96d9-cbbddcb61be1">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.2"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{panalocare_plus_annual} - $F{panalocare_plus_annual_new}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="592" y="0" width="50" height="10" uuid="fda4b67b-7911-4229-bee7-fd7c82e9351c">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.2"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[SUM($F{panalocare} - $F{panalocare_new}, $F{panalocare_plus} - $F{panalocare_plus_new}, $F{panalocare_annual} - $F{panalocare_annual_new}, $F{panalocare_plus_annual} - $F{panalocare_plus_annual_new}).intValue()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="542" y="0" width="50" height="10" uuid="bd9fa05a-2a3f-4817-84d1-07163469d726">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.2"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[SUM($F{panalocare_new},$F{panalocare_plus_new},$F{panalocare_annual_new},$F{panalocare_plus_annual_new}).intValue()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="407" y="0" width="45" height="10" uuid="bd74d01b-03d0-40f4-9731-809afe4bb5b9">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.2"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{panalocare_annual} - $F{panalocare_annual_new}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inputControl exportedWithPermissions="true">
+    <folder>/Input_Controls</folder>
+    <name>source</name>
+    <version>2</version>
+    <label>Source</label>
+    <description></description>
+    <creationDate>2016-12-02T09:33:20.613Z</creationDate>
+    <updateDate>2016-12-02T08:13:04.370Z</updateDate>
+    <type>3</type>
+    <mandatory>true</mandatory>
+    <readOnly>false</readOnly>
+    <visible>true</visible>
+    <listOfValues>
+        <localResource
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            exportedWithPermissions="false" xsi:type="listOfValues">
+            <folder>/Input_Controls/source_files</folder>
+            <name>domestic</name>
+            <version>1</version>
+            <label>Domestic</label>
+            <description></description>
+            <creationDate>2016-12-02T09:33:20.613Z</creationDate>
+            <updateDate>2016-12-02T08:13:04.370Z</updateDate>
+            <item>
+                <itemLabel>International</itemLabel>
+                <itemValue xmlns:java="http://java.sun.com" xsi:type="java:java.lang.String">INTERNATIONAL</itemValue>
+            </item>
+            <item>
+                <itemLabel>Domestic</itemLabel>
+                <itemValue xmlns:java="http://java.sun.com" xsi:type="java:java.lang.String">DOMESTIC</itemValue>
+            </item>
+        </localResource>
+    </listOfValues>
+</inputControl>

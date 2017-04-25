@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inputControl exportedWithPermissions="true">
+    <folder>/Input_Controls</folder>
+    <name>branch</name>
+    <version>14</version>
+    <label>Branch</label>
+    <description></description>
+    <creationDate>2016-09-09T04:08:09.349Z</creationDate>
+    <updateDate>2016-06-14T06:30:17.154Z</updateDate>
+    <type>4</type>
+    <mandatory>true</mandatory>
+    <readOnly>false</readOnly>
+    <visible>true</visible>
+    <query>
+        <uri>/Input_Controls/Queries/List_of_Branches</uri>
+    </query>
+    <queryVisibleColumn>name</queryVisibleColumn>
+    <queryValueColumn>id</queryValueColumn>
+</inputControl>

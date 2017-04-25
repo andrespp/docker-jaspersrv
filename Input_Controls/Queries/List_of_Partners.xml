@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<query exportedWithPermissions="true">
+    <folder>/Input_Controls/Queries</folder>
+    <name>List_of_Partners</name>
+    <version>16</version>
+    <label>List of Partners</label>
+    <description></description>
+    <creationDate>2016-12-02T09:33:20.022Z</creationDate>
+    <updateDate>2016-06-14T06:19:09.194Z</updateDate>
+    <language>sql</language>
+    <queryString>select id, name from web_partner</queryString>
+    <dataSource>
+        <uri>/Datasources/SendahRemit</uri>
+    </dataSource>
+</query>

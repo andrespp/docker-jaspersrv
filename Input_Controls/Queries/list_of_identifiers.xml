@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<query exportedWithPermissions="true">
+    <folder>/Input_Controls/Queries</folder>
+    <name>list_of_identifiers</name>
+    <version>18</version>
+    <label>List of Identifiers</label>
+    <description></description>
+    <creationDate>2016-07-07T10:10:47.752Z</creationDate>
+    <updateDate>2016-07-12T05:21:24.263Z</updateDate>
+    <language>sql</language>
+    <queryString>SELECT
+    username
+FROM
+    public.accounts
+</queryString>
+    <dataSource>
+        <uri>/Datasources/SD4Backend</uri>
+    </dataSource>
+</query>

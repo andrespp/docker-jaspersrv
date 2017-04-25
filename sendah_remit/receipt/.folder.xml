@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<folder exportedWithPermissions="true">
+    <parent>/sendah_remit</parent>
+    <name>receipt</name>
+    <label>receipt</label>
+    <description></description>
+    <creationDate>2016-06-29T08:56:18.634Z</creationDate>
+    <updateDate>2016-06-27T02:16:27.519Z</updateDate>
+    <resource>receive_money_receipt</resource>
+    <resource>send_money_receipt</resource>
+</folder>

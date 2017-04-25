@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<query exportedWithPermissions="true">
+    <folder>/Input_Controls/Queries</folder>
+    <name>List_of_Users</name>
+    <version>20</version>
+    <label>List of Users</label>
+    <description></description>
+    <creationDate>2016-09-09T04:10:33.891Z</creationDate>
+    <updateDate>2016-06-21T10:21:29.636Z</updateDate>
+    <language>sql</language>
+    <queryString>SELECT
+    id, first_name || ' ' || last_name as name
+FROM
+    auth_user</queryString>
+    <dataSource>
+        <uri>/Datasources/SendahRemit</uri>
+    </dataSource>
+</query>

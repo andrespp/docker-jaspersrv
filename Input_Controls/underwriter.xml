@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inputControl exportedWithPermissions="true">
+    <folder>/Input_Controls</folder>
+    <name>underwriter</name>
+    <version>1</version>
+    <label>Underwriter</label>
+    <description></description>
+    <creationDate>2017-02-16T18:01:43.957Z</creationDate>
+    <updateDate>2017-02-16T18:06:29.639Z</updateDate>
+    <type>4</type>
+    <mandatory>false</mandatory>
+    <readOnly>false</readOnly>
+    <visible>true</visible>
+    <query>
+        <uri>/Input_Controls/Queries/List_of_Underwriters</uri>
+    </query>
+    <queryVisibleColumn>name</queryVisibleColumn>
+    <queryValueColumn>id</queryValueColumn>
+</inputControl>

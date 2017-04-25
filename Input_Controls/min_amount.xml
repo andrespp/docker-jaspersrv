@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inputControl exportedWithPermissions="true">
+    <folder>/Input_Controls</folder>
+    <name>min_amount</name>
+    <version>0</version>
+    <label>Min Amount</label>
+    <description></description>
+    <creationDate>2016-11-02T03:26:47.605Z</creationDate>
+    <updateDate>2016-11-02T03:26:47.605Z</updateDate>
+    <type>2</type>
+    <mandatory>true</mandatory>
+    <readOnly>false</readOnly>
+    <visible>true</visible>
+    <dataType>
+        <localResource
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            exportedWithPermissions="false" xsi:type="dataType">
+            <folder>/Input_Controls/min_amount_files</folder>
+            <name>min_amount</name>
+            <version>0</version>
+            <label>min_amount</label>
+            <description></description>
+            <creationDate>2016-11-02T03:26:47.605Z</creationDate>
+            <updateDate>2016-11-02T03:26:47.605Z</updateDate>
+            <type>2</type>
+            <minValue xmlns:java="http://java.sun.com" xsi:type="java:java.lang.String">0</minValue>
+            <strictMin>false</strictMin>
+            <strictMax>false</strictMax>
+        </localResource>
+    </dataType>
+</inputControl>

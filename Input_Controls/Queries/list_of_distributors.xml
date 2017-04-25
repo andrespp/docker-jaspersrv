@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<query exportedWithPermissions="true">
+    <folder>/Input_Controls/Queries</folder>
+    <name>list_of_distributors</name>
+    <version>1</version>
+    <label>List of Distributors</label>
+    <description></description>
+    <creationDate>2016-07-28T06:22:30.838Z</creationDate>
+    <updateDate>2016-07-28T06:31:42.149Z</updateDate>
+    <language>sql</language>
+    <queryString>SELECT DISTINCT
+    id,
+    username
+FROM
+    accounts
+WHERE id IN
+(
+    SELECT DISTINCT
+        distributor_id
+    FROM
+        accounts
+)</queryString>
+    <dataSource>
+        <uri>/Datasources/SD4Backend</uri>
+    </dataSource>
+</query>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<folder exportedWithPermissions="true">
+    <parent>/</parent>
+    <name>sendah_remit</name>
+    <label>sendah-remit</label>
+    <description></description>
+    <creationDate>2016-06-15T12:42:30.272Z</creationDate>
+    <updateDate>2016-06-13T10:23:23.828Z</updateDate>
+    <folder>branch</folder>
+    <folder>internal</folder>
+    <folder>logs</folder>
+    <folder>partner</folder>
+    <folder>receipt</folder>
+</folder>

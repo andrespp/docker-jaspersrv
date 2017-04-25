@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inputControl exportedWithPermissions="true">
+    <folder>/Input_Controls</folder>
+    <name>username</name>
+    <version>1</version>
+    <label>Username</label>
+    <description></description>
+    <creationDate>2016-11-10T02:05:25.193Z</creationDate>
+    <updateDate>2016-08-05T09:47:17.087Z</updateDate>
+    <type>4</type>
+    <mandatory>true</mandatory>
+    <readOnly>false</readOnly>
+    <visible>true</visible>
+    <query>
+        <uri>/Input_Controls/Queries/list_of_usernames</uri>
+    </query>
+    <queryVisibleColumn>username</queryVisibleColumn>
+    <queryValueColumn>username</queryValueColumn>
+</inputControl>

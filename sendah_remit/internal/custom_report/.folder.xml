@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<folder exportedWithPermissions="true">
+    <parent>/sendah_remit/internal</parent>
+    <name>custom_report</name>
+    <label>custom report</label>
+    <description></description>
+    <creationDate>2016-11-02T01:35:26.332Z</creationDate>
+    <updateDate>2016-11-02T01:35:26.332Z</updateDate>
+    <resource>cash_in_by_partner_filter_by_payout_date</resource>
+    <resource>overall_transaction_with_location</resource>
+    <resource>transaction_register_cash_in_w_amount_range</resource>
+</folder>

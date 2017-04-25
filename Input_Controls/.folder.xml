@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<folder exportedWithPermissions="true">
+    <parent>/</parent>
+    <name>Input_Controls</name>
+    <label>Input Controls</label>
+    <description></description>
+    <creationDate>2016-06-15T12:42:18.541Z</creationDate>
+    <updateDate>2016-06-14T02:39:27.954Z</updateDate>
+    <folder>Queries</folder>
+    <resource>branch</resource>
+    <resource>broker</resource>
+    <resource>distributor</resource>
+    <resource>end_date</resource>
+    <resource>end_datetime</resource>
+    <resource>identifier</resource>
+    <resource>max_amount</resource>
+    <resource>min_amount</resource>
+    <resource>partner</resource>
+    <resource>remittance_id</resource>
+    <resource>rh_partner</resource>
+    <resource>source</resource>
+    <resource>start_date</resource>
+    <resource>start_datetime</resource>
+    <resource>timezone</resource>
+    <resource>underwriter</resource>
+    <resource>user</resource>
+    <resource>username</resource>
+    <permission>
+        <permissionMask>32</permissionMask>
+        <recipient recipientType="role">ROLE_USER</recipient>
+    </permission>
+</folder>

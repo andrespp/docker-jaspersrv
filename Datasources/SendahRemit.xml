@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jdbcDataSource exportedWithPermissions="true">
+    <folder>/Datasources</folder>
+    <name>SendahRemit</name>
+    <version>30</version>
+    <label>SendahRemit</label>
+    <creationDate>2016-12-02T09:33:19.796Z</creationDate>
+    <updateDate>2017-03-28T21:31:05.986Z</updateDate>
+    <driver>org.postgresql.Driver</driver>
+    <connectionUrl>jdbc:postgresql://postgresql-1-vm.c.ayannah-infrastructure.internal/sendahremit</connectionUrl>
+    <connectionUser>sendahremit</connectionUser>
+    <connectionPassword>ENC&lt;C29FA52C54B356C3E99ECF18D355AFB33CF29529B8F31DCC2326AB6B8D0E7EE2&gt;</connectionPassword>
+    <timezone></timezone>
+</jdbcDataSource>

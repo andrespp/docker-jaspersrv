@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<query exportedWithPermissions="true">
+    <folder>/Input_Controls/Queries</folder>
+    <name>List_of_Underwriters</name>
+    <version>0</version>
+    <label>List of Underwriters</label>
+    <description></description>
+    <creationDate>2017-02-16T18:00:56.955Z</creationDate>
+    <updateDate>2017-02-16T18:00:56.955Z</updateDate>
+    <language>sql</language>
+    <queryString>SELECT
+    id, name
+FROM
+    api_underwriter</queryString>
+    <dataSource>
+        <uri>/Datasources/panalocare</uri>
+    </dataSource>
+</query>

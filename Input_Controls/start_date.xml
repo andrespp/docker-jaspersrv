@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inputControl exportedWithPermissions="true">
+    <folder>/Input_Controls</folder>
+    <name>start_date</name>
+    <version>26</version>
+    <label>Start Date</label>
+    <description></description>
+    <creationDate>2016-12-02T09:33:20.260Z</creationDate>
+    <updateDate>2016-06-14T02:43:17.395Z</updateDate>
+    <type>2</type>
+    <mandatory>true</mandatory>
+    <readOnly>false</readOnly>
+    <visible>true</visible>
+    <dataType>
+        <localResource
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            exportedWithPermissions="false" xsi:type="dataType">
+            <folder>/Input_Controls/start_date_files</folder>
+            <name>start_date</name>
+            <version>1</version>
+            <label>Start Date</label>
+            <description></description>
+            <creationDate>2016-12-02T09:33:20.260Z</creationDate>
+            <updateDate>2016-06-14T02:40:48.475Z</updateDate>
+            <type>3</type>
+            <strictMin>false</strictMin>
+            <strictMax>false</strictMax>
+        </localResource>
+    </dataType>
+</inputControl>

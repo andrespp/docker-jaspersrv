@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inputControl exportedWithPermissions="true">
+    <folder>/Input_Controls</folder>
+    <name>partner</name>
+    <version>15</version>
+    <label>Partner</label>
+    <description></description>
+    <creationDate>2016-12-02T09:33:20.112Z</creationDate>
+    <updateDate>2016-06-14T06:20:12.444Z</updateDate>
+    <type>4</type>
+    <mandatory>true</mandatory>
+    <readOnly>false</readOnly>
+    <visible>true</visible>
+    <query>
+        <uri>/Input_Controls/Queries/List_of_Partners</uri>
+    </query>
+    <queryVisibleColumn>name</queryVisibleColumn>
+    <queryValueColumn>id</queryValueColumn>
+</inputControl>

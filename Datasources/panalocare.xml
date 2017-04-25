@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jdbcDataSource exportedWithPermissions="true">
+    <folder>/Datasources</folder>
+    <name>panalocare</name>
+    <version>2</version>
+    <label>PanaloCare</label>
+    <creationDate>2017-02-16T17:34:16.123Z</creationDate>
+    <updateDate>2017-04-05T01:45:33.293Z</updateDate>
+    <driver>org.postgresql.Driver</driver>
+    <connectionUrl>jdbc:postgresql://postgresql-1-vm.c.ayannah-infrastructure.internal:5432/panalocare</connectionUrl>
+    <connectionUser>panalocare</connectionUser>
+    <connectionPassword>ENC&lt;A1B729F6D31D576FE9D17D34E431EECBC009541A3F74D4909C0B6ED1C723A997&gt;</connectionPassword>
+    <timezone></timezone>
+</jdbcDataSource>

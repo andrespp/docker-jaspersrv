@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inputControl exportedWithPermissions="true">
+    <folder>/Input_Controls</folder>
+    <name>broker</name>
+    <version>0</version>
+    <label>Broker</label>
+    <description></description>
+    <creationDate>2017-02-16T17:57:43.072Z</creationDate>
+    <updateDate>2017-02-16T17:57:43.072Z</updateDate>
+    <type>4</type>
+    <mandatory>false</mandatory>
+    <readOnly>false</readOnly>
+    <visible>true</visible>
+    <query>
+        <uri>/Input_Controls/Queries/List_of_Brokers</uri>
+    </query>
+    <queryVisibleColumn>name</queryVisibleColumn>
+    <queryValueColumn>id</queryValueColumn>
+</inputControl>

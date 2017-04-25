@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.0.final using JasperReports Library version 6.3.0  -->
+<!-- 2016-08-18T12:05:48 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Send Money Form" pageWidth="612" pageHeight="792" columnWidth="612" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="e776087c-96d6-4236-94ed-da7a31edad02">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sendah Remit"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.background.image.widht" value="mm"/>
+	<property name="com.jaspersoft.studio.unit.background.image.height" value="mm"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="remittance_id" class="java.lang.Integer"/>
+	<parameter name="timezone" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Asia/Manila"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+		rmt.id,
+		rmt.source_reference_number,
+		rmd.remitter_name,
+		rmd.remitter_address,
+		rmd.remitter_contact_number,
+		rmd.remitter_id_type,
+		rmd.remitter_id_number,
+		rmd.beneficiary_name,
+		rmd.beneficiary_address,
+		rmd.beneficiary_contact_number,
+		rmd.beneficiary_id_type,
+		rmd.beneficiary_id_number,
+		rmd.payout_amount,
+		rmd.handling_fee,
+		rmd.date_created::TIMESTAMP AT TIME ZONE 'UTC' AT TIME ZONE $P{timezone} as date_created,
+		rmd.payout_amount + rmd.handling_fee as total_fee,
+		wb.name
+FROM
+		web_remittance rmt LEFT OUTER JOIN web_branch wb ON rmt.source_branch_id = wb.id,
+		(
+			SELECT
+					DISTINCT ON	(remittance_id)
+					remittance_id, 
+					remitter_name,
+					remitter_address,
+					remitter_contact_number,
+					remitter_id_type,
+					remitter_id_number,
+					beneficiary_name,
+					beneficiary_address,
+					beneficiary_contact_number,
+					beneficiary_id_type,
+					beneficiary_id_number,
+					payout_amount,
+					handling_fee,
+					date_created
+			FROM
+					web_remittancedetail
+			WHERE
+					status='NEW'
+			ORDER BY
+					remittance_id, date_created DESC
+		)rmd
+WHERE
+		rmt.id = $P{remittance_id}
+		AND rmt.id = rmd.remittance_id]]>
+	</queryString>
+	<field name="id" class="java.lang.Integer"/>
+	<field name="source_reference_number" class="java.lang.String"/>
+	<field name="remitter_name" class="java.lang.String"/>
+	<field name="remitter_address" class="java.lang.String"/>
+	<field name="remitter_contact_number" class="java.lang.String"/>
+	<field name="remitter_id_type" class="java.lang.String"/>
+	<field name="remitter_id_number" class="java.lang.String"/>
+	<field name="beneficiary_name" class="java.lang.String"/>
+	<field name="beneficiary_address" class="java.lang.String"/>
+	<field name="beneficiary_contact_number" class="java.lang.String"/>
+	<field name="beneficiary_id_type" class="java.lang.String"/>
+	<field name="beneficiary_id_number" class="java.lang.String"/>
+	<field name="payout_amount" class="java.math.BigDecimal"/>
+	<field name="handling_fee" class="java.math.BigDecimal"/>
+	<field name="date_created" class="java.sql.Timestamp"/>
+	<field name="total_fee" class="java.math.BigDecimal"/>
+	<field name="name" class="java.lang.String"/>
+	<detail>
+		<band height="643" splitType="Stretch">
+			<textField>
+				<reportElement x="70" y="70" width="148" height="22" uuid="d99166fd-68c4-4acd-82a1-7236077d7661"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{source_reference_number}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="245" y="71" width="70" height="10" uuid="f01bc3c4-4fad-4fad-8b2e-93043dd1a6ae">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[DATEFORMAT($F{date_created},"MM-dd-yyyy")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="245" y="81" width="70" height="10" uuid="2f22408e-1f65-4e7a-a513-4f7173bd8d46">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[DATEFORMAT($F{date_created},"HH:mm:ss")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="40" y="132" width="180" height="13" uuid="9750d5ed-09c1-4835-b5d3-8ff3d91097c3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{remitter_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="55" y="148" width="164" height="13" uuid="763b4c9a-8c17-4e14-85ca-5aee441fdde7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{remitter_contact_number}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="47" y="163" width="172" height="13" isPrintWhenDetailOverflows="true" uuid="3333a7d1-27b1-4547-8619-d668cacdb7d7">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{remitter_address}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="40" y="200" width="204" height="13" uuid="dbed928c-dba1-4a1e-8471-c6c1e31b26ad"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{beneficiary_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="170" y="216" width="74" height="13" uuid="803756c1-1dc2-461b-b22d-79da9c154e97">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="54" y="216" width="74" height="13" uuid="1020fbf2-721b-47fb-8c2d-f4748046c7ec">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{beneficiary_contact_number}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="47" y="235" width="197" height="13" uuid="da86f1c0-d13a-47da-be46-bf260d63b76b">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{beneficiary_address}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="74" y="251" width="157" height="13" uuid="de9f41ef-7dde-4dd1-994c-236c5f3bfef6">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" "]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="6" y="320" width="20" height="20" uuid="2ab246aa-6b24-4d20-8d40-ffccafbf4257"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="15"/>
+				</textElement>
+				<text><![CDATA[✓]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="175" y="292" width="94" height="13" uuid="89a219c4-c200-4395-b09b-de05d354348b"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{handling_fee}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="170" y="307" width="90" height="13" uuid="ff58641b-4d36-4e32-b0e3-785cc373b81b">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_fee}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="172" y="276" width="120" height="17" uuid="b5d083be-ef65-4531-960c-0c5e9496ee50"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font fontName="Arial" size="10" isBold="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{payout_amount}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inputControl exportedWithPermissions="true">
+    <folder>/Input_Controls</folder>
+    <name>end_datetime</name>
+    <version>1</version>
+    <label>End Date/Time</label>
+    <description></description>
+    <creationDate>2016-11-10T02:05:24.415Z</creationDate>
+    <updateDate>2016-08-05T07:11:53.319Z</updateDate>
+    <type>2</type>
+    <mandatory>true</mandatory>
+    <readOnly>false</readOnly>
+    <visible>true</visible>
+    <dataType>
+        <localResource
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            exportedWithPermissions="false" xsi:type="dataType">
+            <folder>/Input_Controls/end_datetime_files</folder>
+            <name>end_date_time</name>
+            <version>1</version>
+            <label>end_date_time</label>
+            <description></description>
+            <creationDate>2016-11-10T02:05:24.415Z</creationDate>
+            <updateDate>2016-08-05T07:11:53.319Z</updateDate>
+            <type>4</type>
+            <strictMin>false</strictMin>
+            <strictMax>false</strictMax>
+        </localResource>
+    </dataType>
+</inputControl>

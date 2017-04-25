@@ -1,0 +1,684 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2017-04-24T18:38:37 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Branch Transaction Register - Cash In" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="20" bottomMargin="20" uuid="4eedbb89-b4f6-4469-9ab6-f642a1688cf7">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sendah Remit"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="0"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="1000"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true"/>
+	<style name="Detail" mode="Transparent" fontName="Times New Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#EEEFF0"/>
+		</conditionalStyle>
+	</style>
+	<style name="Table">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_CH" mode="Opaque" backcolor="#CACED0">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style backcolor="#D8D8D8"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="user" class="java.lang.Integer"/>
+	<parameter name="start_date" class="java.util.Date"/>
+	<parameter name="end_date" class="java.util.Date"/>
+	<parameter name="branch" class="java.lang.Integer"/>
+	<parameter name="timezone" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Asia/Manila"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+    wp.name as partner, 
+    wb.name as branch,
+    au.first_name,
+    au.last_name,
+    rc.name,
+    rd.source_reference_number,
+    rd.type, rd.remitter_name,
+    rd.beneficiary_name,
+    rd.status,
+    rd.payout_amount,
+    rd.payout_currency,
+    rd.handling_fee,
+    rd.source_partner_share,
+    rd.payout_amount + handling_fee as total,
+    rd.process_date::TIMESTAMP AT TIME ZONE 'UTC' AT TIME ZONE $P{timezone} as process_date,
+    rd.date_created::TIMESTAMP AT TIME ZONE 'UTC' AT TIME ZONE $P{timezone} as date_created,
+    rd.cashin_date::TIMESTAMP AT TIME ZONE 'UTC' AT TIME ZONE $P{timezone} as cashin_date,
+    rd.source_branch_id
+FROM
+    web_branch wb JOIN web_partner wp ON wp.id = wb.partner_id,
+    (
+    SELECT 
+    	r.id,
+    	r.cashin_date,
+        r.source_reference_number, 
+        rd.type, 
+        rd.remitter_name, 
+        rd.beneficiary_name,
+        rd.payout_amount,
+        rd.payout_currency,
+        rd.handling_fee,
+        rd.source_partner_share,
+        rd.status,
+        rd.created_by_id,
+        rd.process_date,
+        rd.date_created,
+        r.source_branch_id
+    FROM 
+        web_remittance r,
+        (
+         SELECT 
+            DISTINCT ON (id)wr.id,
+            wrd.id as rid,
+            wrd.type,
+            wrd.remitter_name, 
+            wrd.beneficiary_name,
+            wrd.payout_amount,
+            wrd.payout_currency,
+            wrd.handling_fee,
+            wrd.source_partner_share,
+            wrd.status,
+            wrd.created_by_id,
+            wr.date_created as process_date,
+			wrd.date_created
+        FROM 
+            web_remittance wr JOIN web_remittancedetail wrd ON wr.id = wrd.remittance_id
+        GROUP BY 
+            wr.id,
+            rid,
+            wrd.type, 
+            wrd.remitter_name, 
+            wrd.beneficiary_name,
+            wrd.payout_amount,
+            wrd.status,
+            wrd.payout_currency,
+            wrd.handling_fee,
+            wrd.source_partner_share,
+            wrd.created_by_id,
+            wrd.date_created
+         ORDER BY
+         	wr.id,
+			rid DESC
+        ) rd
+    WHERE 
+        r.id = rd.id)rd JOIN auth_user au ON au.id = (SELECT created_by_id FROM web_remittancedetail where remittance_id = rd.id AND status='NEW' ORDER BY date_created DESC LIMIT 1),
+        (
+        SELECT 
+            first_name || ' ' || last_name as name
+        FROM
+            auth_user
+        WHERE
+            id = $P{user}
+    )rc
+WHERE
+    wb.id = $P{branch} AND rd.source_branch_id = wb.id AND CAST(rd.cashin_date::TIMESTAMP AT TIME ZONE 'UTC' AT TIME ZONE $P{timezone} as DATE) BETWEEN $P{start_date} AND $P{end_date}
+ORDER BY
+    CAST(rd.cashin_date as DATE), au.first_name, au.last_name]]>
+	</queryString>
+	<field name="partner" class="java.lang.String"/>
+	<field name="branch" class="java.lang.String"/>
+	<field name="first_name" class="java.lang.String"/>
+	<field name="last_name" class="java.lang.String"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="source_reference_number" class="java.lang.String"/>
+	<field name="type" class="java.lang.String"/>
+	<field name="remitter_name" class="java.lang.String"/>
+	<field name="beneficiary_name" class="java.lang.String"/>
+	<field name="status" class="java.lang.String"/>
+	<field name="payout_amount" class="java.math.BigDecimal"/>
+	<field name="payout_currency" class="java.lang.String"/>
+	<field name="handling_fee" class="java.math.BigDecimal"/>
+	<field name="source_partner_share" class="java.math.BigDecimal"/>
+	<field name="total" class="java.math.BigDecimal"/>
+	<field name="process_date" class="java.sql.Timestamp"/>
+	<field name="date_created" class="java.sql.Timestamp"/>
+	<field name="source_branch_id" class="java.lang.Integer"/>
+	<field name="cashin_date" class="java.sql.Timestamp"/>
+	<variable name="total_remittance" class="java.math.BigDecimal" resetType="Group" resetGroup="TRANSACTION" calculation="Sum">
+		<variableExpression><![CDATA[$F{payout_amount}]]></variableExpression>
+	</variable>
+	<variable name="total_handling_fee" class="java.math.BigDecimal" resetType="Group" resetGroup="TRANSACTION" calculation="Sum">
+		<variableExpression><![CDATA[$F{handling_fee}]]></variableExpression>
+	</variable>
+	<variable name="total_cash_in" class="java.math.BigDecimal" resetType="Group" resetGroup="TRANSACTION" calculation="Sum">
+		<variableExpression><![CDATA[$F{source_partner_share}]]></variableExpression>
+	</variable>
+	<group name="TRANSACTION">
+		<groupExpression><![CDATA[$F{first_name} + " " + $F{last_name} + " " + DATEFORMAT($F{cashin_date}, "yyyy-MM-dd")]]></groupExpression>
+		<groupHeader>
+			<band height="25">
+				<staticText>
+					<reportElement x="0" y="0" width="54" height="10" uuid="f0f4414a-094a-480f-87cc-c90f7fd98ba1">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					</reportElement>
+					<textElement textAlignment="Left">
+						<font fontName="Arial" size="7" isBold="false"/>
+					</textElement>
+					<text><![CDATA[TELLER NAME:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true">
+					<reportElement x="54" y="0" width="180" height="10" uuid="ce2c9cb9-fee3-4149-9fff-407f0f6b72d1">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					</reportElement>
+					<textElement>
+						<font fontName="Arial" size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{first_name} + " " + $F{last_name}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="0" y="9" width="515" height="1" uuid="1e3e5320-8d47-4807-b219-e3f9dcaf9c84"/>
+					<graphicElement>
+						<pen lineWidth="0.8"/>
+					</graphicElement>
+				</line>
+				<staticText>
+					<reportElement x="0" y="10" width="38" height="15" uuid="f2228ad1-154a-4f68-9a38-a640b72b729b">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					</reportElement>
+					<box>
+						<topPen lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="7" isBold="false"/>
+					</textElement>
+					<text><![CDATA[STATUS]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="38" y="10" width="75" height="15" uuid="2fc572b7-4fba-4729-af3d-7982da80f9dc">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					</reportElement>
+					<box>
+						<topPen lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" size="7" isBold="false"/>
+					</textElement>
+					<text><![CDATA[REFERENCE NO.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="113" y="10" width="85" height="15" uuid="3ad25297-ba4d-4992-8099-04d57ae13b7c"/>
+					<box>
+						<topPen lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" size="7" isBold="false"/>
+					</textElement>
+					<text><![CDATA[REMITTER]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="198" y="10" width="85" height="15" uuid="31fd4f40-230f-4a1a-a33a-b0c4eb82b854"/>
+					<box>
+						<topPen lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="7" isBold="false"/>
+					</textElement>
+					<text><![CDATA[BENEFICIARY]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="283" y="10" width="67" height="15" uuid="f14824eb-bc31-4c54-9c8e-b0429185e123"/>
+					<box>
+						<topPen lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Arial" size="7" isBold="false"/>
+					</textElement>
+					<text><![CDATA[REM. AMOUNT]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="350" y="10" width="61" height="15" uuid="f65a5821-4bb7-4b72-9f5d-68e033f4965f">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					</reportElement>
+					<box>
+						<topPen lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Arial" size="7" isBold="false"/>
+					</textElement>
+					<text><![CDATA[HNDLG. FEE]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="411" y="10" width="50" height="15" uuid="4dfdd10d-fe65-441f-b23b-9b98ff0c0948">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					</reportElement>
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Arial" size="7" isBold="false"/>
+					</textElement>
+					<text><![CDATA[C.I. FEE]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="461" y="10" width="53" height="15" uuid="1c05dd49-142e-47ad-8ea1-702d081320f7">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					</reportElement>
+					<box>
+						<topPen lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Arial" size="7" isBold="false"/>
+					</textElement>
+					<text><![CDATA[TOTAL]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="22" width="515" height="1" uuid="148491fc-c735-4f21-8b8d-3c31011613ef">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					</reportElement>
+					<graphicElement>
+						<pen lineWidth="0.1"/>
+					</graphicElement>
+				</line>
+				<textField isStretchWithOverflow="true">
+					<reportElement x="414" y="0" width="100" height="10" uuid="fe198bf3-330c-4f99-a2d1-c698bdf553eb"/>
+					<textElement textAlignment="Right">
+						<font fontName="Arial" size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[DATEFORMAT($F{cashin_date}, "MM-dd-yyyy")]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="32">
+				<textField isStretchWithOverflow="true">
+					<reportElement x="230" y="2" width="103" height="10" uuid="b94e1be5-893d-4f6b-bb39-b4a936a5679b"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" size="6" isBold="false" isItalic="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Total Handling Fee:     " + new java.text.DecimalFormat("#,##0.00").format($V{total_handling_fee})]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement x="333" y="2" width="103" height="10" uuid="29f78691-faef-45d7-b3f3-6ce22c9bca41"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" size="6" isBold="false" isItalic="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Total Cash In Fee:     " + new java.text.DecimalFormat("#,##0.00").format($V{total_cash_in})]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement x="436" y="2" width="93" height="10" uuid="b66ca3a7-71ca-4fad-885c-736785fbfdcd">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					</reportElement>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" size="6" isBold="false" isItalic="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Total:     " + new java.text.DecimalFormat("#,##0.00").format(SUM($V{total_remittance}, $V{total_handling_fee}).doubleValue() -  $V{total_cash_in}.doubleValue())]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="0" y="-1" width="515" height="1" uuid="3ada7b8d-afa9-49d0-b84b-5e9b1b8841fe">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					</reportElement>
+					<graphicElement>
+						<pen lineWidth="0.01"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement x="0" y="13" width="515" height="1" uuid="a5c79938-0c25-4d4e-8468-b2742b1c7ee8"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</line>
+				<textField isStretchWithOverflow="true">
+					<reportElement x="0" y="2" width="89" height="10" uuid="340ca0c1-62e8-464f-aadf-a4817c2bdb87"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" size="6" isBold="false" isItalic="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Branch Subtotal:     " + $V{TRANSACTION_COUNT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement x="89" y="2" width="141" height="10" uuid="a062b735-3007-406d-9eee-c71022527997"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" size="6" isBold="false" isItalic="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Total Remittance:     " + new java.text.DecimalFormat("#,##0.00").format($V{total_remittance})]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<title>
+		<band height="49" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<staticText>
+				<reportElement x="0" y="0" width="514" height="10" uuid="e622555d-198b-4ccd-a4a1-c59c53304058">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Arial" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TRANSACTION REGISTER - CASH IN]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="10" width="514" height="10" uuid="92a664bf-b494-4f70-ba97-916a3c2a12c0">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Arial" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{partner} + " - " +$F{branch}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="20" width="514" height="10" uuid="e4c9cc3a-a3f2-4a78-b07d-b0628d9f2d62">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Arial" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["PROCESS DATE: "+IF(EQUALS(DATEFORMAT($P{start_date}, "MMMM d, yyyy"),DATEFORMAT($P{end_date}, "MMMM d, yyyy")),DATEFORMAT($P{start_date}, "MMMM d, yyyy"),"From " + DATEFORMAT( $P{start_date}, "MMMM d, yyyy") + " to " + DATEFORMAT($P{end_date}, "MMMM d, yyyy"))]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="47" width="515" height="1" uuid="eeb372be-2d02-4d5a-8b40-8367d2a99dc3"/>
+				<graphicElement>
+					<pen lineWidth="1.0"/>
+				</graphicElement>
+			</line>
+		</band>
+	</title>
+	<detail>
+		<band height="12">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="2" width="38" height="10" uuid="ac5bfb17-925b-4193-9e78-68b329bde743">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(EQUALS($F{status}, "PAID"))? "PD":(EQUALS($F{status}, "CANCELLED"))? "CN": (EQUALS($F{status}, "FORFEITED")? "F":(EQUALS($F{status}, "NEW"))? "AP":(EQUALS($F{status}, "FRAUD"))?"FR":(EQUALS($F{status}, "ON_HOLD"))?"OH":(EQUALS($F{status}, "PENDING_CANCELLATION"))?"PC":"PA")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="38" y="2" width="75" height="10" uuid="5a2ecbae-b8be-42f6-98a6-5d1ae5412d10">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{source_reference_number}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="113" y="2" width="85" height="10" uuid="2ef2fb66-2c11-4335-b78d-08b48ef94b81"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left">
+					<font fontName="Arial" size="6"/>
+					<paragraph lineSpacingSize="2.0"/>
+				</textElement>
+				<textFieldExpression><![CDATA[UPPER($F{remitter_name})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="198" y="2" width="85" height="10" uuid="23a4125a-502a-4b85-8055-4bc33ce8ad10"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[UPPER($F{beneficiary_name})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="283" y="2" width="67" height="10" uuid="63dd4ac5-55eb-485c-92ce-4eb172408a9b"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($F{payout_amount})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="350" y="2" width="61" height="10" uuid="fe62bab7-eb77-4fcd-9757-5d69c28fe1d4">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($F{handling_fee})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="411" y="2" width="50" height="10" uuid="76996954-9691-4dc8-8832-f653559f8eee">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($F{source_partner_share})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="461" y="2" width="53" height="10" uuid="f9de8593-130f-4b67-a0d5-881f6bbf1865">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($F{total})]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="21">
+			<staticText>
+				<reportElement x="0" y="4" width="452" height="10" uuid="87b0e4b9-42c3-4593-bf79-bd500ab10847"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="5" isBold="false" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Legend:     AP Available for Payout,      CN Cancelled,     F Forfeited,      FR Fraud,     OH On Hold,     PD Paid,     PA Pending Amendment,     PC Pending Cancellation]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="400" y="4" width="52" height="10" uuid="2fa43265-1faa-4645-9162-973a4000ebbb">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" evaluationTime="Report">
+				<reportElement x="452" y="4" width="100" height="10" uuid="f481cf03-0438-4866-b918-bf9b05428b6a"/>
+				<textElement textAlignment="Left">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" of " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="61">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<line>
+				<reportElement x="20" y="13" width="190" height="1" uuid="e34ab7d9-468f-4491-943c-7cd191915762"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="300" y="14" width="190" height="1" uuid="7893bea4-952b-4bb1-a553-75a42f388f48"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="20" y="16" width="190" height="16" uuid="472e7127-ad90-4342-93e4-fff79493c48a"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Created By]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="16" width="190" height="16" uuid="9d4f146f-fc5c-4a9b-b308-292fb0d17665"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Checked By]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="44" width="452" height="10" uuid="67c02e1f-67bc-426f-a140-89b02553d924"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="5" isBold="false" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Legend:     AP Available for Payout,      CN Cancelled,     F Forfeited,      FR Fraud,     OH On Hold,     PD Paid,     PA Pending Amendment,     PC Pending Cancellation]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="400" y="44" width="52" height="10" uuid="053f0a07-b95a-4264-b949-83fadf4f1f7f">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" evaluationTime="Report">
+				<reportElement x="452" y="44" width="100" height="10" uuid="63c893bd-fa4b-4e32-9c15-7e1e6d6d15e6"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" of " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="21" y="2" width="188" height="14" uuid="3a187b12-a48c-4087-841c-5a9bcd88cf53"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="301" y="2" width="188" height="14" uuid="9b249dbe-26c4-496c-8519-c93d851aff2a"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+	<noData>
+		<band height="131">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<staticText>
+				<reportElement x="0" y="16" width="514" height="10" uuid="11ddbb79-af0b-48ac-9dd5-bcc4db9452b6">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Arial" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TRANSACTION REGISTER - CASH IN]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="40" width="514" height="30" uuid="0bbaddd3-5c7c-4745-82ab-095e2ace5c54"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["There were no transactions made between " + DATEFORMAT($P{start_date}, "MM/dd/yyyy") + " and " + DATEFORMAT($P{end_date}, "MM/dd/yyyy") +"."]]></textFieldExpression>
+			</textField>
+		</band>
+	</noData>
+</jasperReport>

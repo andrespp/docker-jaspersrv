@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jdbcDataSource exportedWithPermissions="true">
+    <folder>/Datasources</folder>
+    <name>SD4Backend</name>
+    <version>2</version>
+    <label>SD4Backend</label>
+    <creationDate>2016-07-07T10:10:47.386Z</creationDate>
+    <updateDate>2016-07-04T09:05:56.442Z</updateDate>
+    <driver>org.postgresql.Driver</driver>
+    <connectionUrl>jdbc:postgresql://sendahdirect-backend-db:5432/sdplatform</connectionUrl>
+    <connectionUser>sdplatform</connectionUser>
+    <connectionPassword>ENC&lt;9FF2D7BB3EB41D69453F95D12C6EA0AD8D53EE4EC4277A444B168E798F1E4E93&gt;</connectionPassword>
+    <timezone></timezone>
+</jdbcDataSource>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<folder exportedWithPermissions="true">
+    <parent>/sendah_remit/internal</parent>
+    <name>partner</name>
+    <label>partner</label>
+    <description></description>
+    <creationDate>2016-08-12T07:02:49.373Z</creationDate>
+    <updateDate>2016-08-12T05:57:43.533Z</updateDate>
+    <resource>overall_transaction_register_cancelled_xls</resource>
+    <resource>overall_transaction_register_cash_in_xls</resource>
+    <resource>overall_transaction_register_cash_out_xls</resource>
+    <resource>overall_transaction_report</resource>
+    <resource>remittance_hub_report_for_sme</resource>
+    <resource>transaction_register_cash_in_by_partner</resource>
+    <resource>transaction_register_cash_out_by_partner</resource>
+</folder>

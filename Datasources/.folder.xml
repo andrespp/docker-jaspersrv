@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<folder exportedWithPermissions="true">
+    <parent>/</parent>
+    <name>Datasources</name>
+    <label>Datasources</label>
+    <description></description>
+    <creationDate>2016-06-15T12:39:52.927Z</creationDate>
+    <updateDate>2016-06-13T10:20:38.678Z</updateDate>
+    <resource>panalocare</resource>
+    <resource>remittance_hub</resource>
+    <resource>SD4Backend</resource>
+    <resource>SendahRemit</resource>
+    <permission>
+        <permissionMask>32</permissionMask>
+        <recipient recipientType="role">ROLE_USER</recipient>
+    </permission>
+    <permission>
+        <permissionMask>0</permissionMask>
+        <recipient recipientType="role">ROLE_PARTNER</recipient>
+    </permission>
+</folder>

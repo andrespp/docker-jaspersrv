@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<folder exportedWithPermissions="true">
+    <parent>/sendah_remit</parent>
+    <name>internal</name>
+    <label>internal</label>
+    <description></description>
+    <creationDate>2016-08-11T04:00:40.915Z</creationDate>
+    <updateDate>2016-08-01T04:54:18.603Z</updateDate>
+    <folder>custom_report</folder>
+    <folder>partner</folder>
+    <resource>customers_transaction_report</resource>
+    <resource>internal_transaction_register</resource>
+</folder>

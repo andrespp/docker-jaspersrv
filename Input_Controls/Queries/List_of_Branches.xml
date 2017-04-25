@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<query exportedWithPermissions="true">
+    <folder>/Input_Controls/Queries</folder>
+    <name>List_of_Branches</name>
+    <version>15</version>
+    <label>List of Branches</label>
+    <description></description>
+    <creationDate>2016-09-09T04:08:09.326Z</creationDate>
+    <updateDate>2016-08-08T06:01:20.256Z</updateDate>
+    <language>sql</language>
+    <queryString>SELECT
+    wb.id,
+    wp.name || ' - ' || wb.name as name
+FROM
+    web_partner wp, web_branch wb
+WHERE
+    wp.id = wb.partner_id
+ORDER BY
+    name</queryString>
+    <dataSource>
+        <uri>/Datasources/SendahRemit</uri>
+    </dataSource>
+</query>

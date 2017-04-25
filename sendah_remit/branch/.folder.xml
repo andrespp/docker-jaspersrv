@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<folder exportedWithPermissions="true">
+    <parent>/sendah_remit</parent>
+    <name>branch</name>
+    <label>branch</label>
+    <description></description>
+    <creationDate>2016-06-20T06:45:39.886Z</creationDate>
+    <updateDate>2016-06-20T06:41:04.131Z</updateDate>
+    <resource>branch_transaction_register_cancelled</resource>
+    <resource>branch_transaction_register_cash_in</resource>
+    <resource>branch_transaction_register_cash_out</resource>
+</folder>

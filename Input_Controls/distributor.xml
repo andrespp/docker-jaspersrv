@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inputControl exportedWithPermissions="true">
+    <folder>/Input_Controls</folder>
+    <name>distributor</name>
+    <version>4</version>
+    <label>Distributor</label>
+    <description></description>
+    <creationDate>2016-07-28T06:30:11.865Z</creationDate>
+    <updateDate>2016-07-28T07:08:54.547Z</updateDate>
+    <type>4</type>
+    <mandatory>true</mandatory>
+    <readOnly>false</readOnly>
+    <visible>true</visible>
+    <query>
+        <uri>/Input_Controls/Queries/list_of_distributors</uri>
+    </query>
+    <queryVisibleColumn>username</queryVisibleColumn>
+    <queryValueColumn>id</queryValueColumn>
+</inputControl>

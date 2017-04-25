@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inputControl exportedWithPermissions="true">
+    <folder>/Input_Controls</folder>
+    <name>timezone</name>
+    <version>7</version>
+    <label>Timezone (eg. Asia/Manila)</label>
+    <description>Asia/Manila</description>
+    <creationDate>2016-11-10T02:20:55.332Z</creationDate>
+    <updateDate>2016-08-18T09:34:10.010Z</updateDate>
+    <type>2</type>
+    <mandatory>true</mandatory>
+    <readOnly>false</readOnly>
+    <visible>true</visible>
+    <dataType>
+        <localResource
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            exportedWithPermissions="false" xsi:type="dataType">
+            <folder>/Input_Controls/timezone_files</folder>
+            <name>time_zone</name>
+            <version>1</version>
+            <label>timezone</label>
+            <description>'Asia/Manila'</description>
+            <creationDate>2016-11-10T02:20:55.332Z</creationDate>
+            <updateDate>2016-08-18T07:48:09.422Z</updateDate>
+            <type>1</type>
+            <regularExpr></regularExpr>
+            <strictMin>false</strictMin>
+            <strictMax>false</strictMax>
+        </localResource>
+    </dataType>
+    <queryVisibleColumn>timezone</queryVisibleColumn>
+    <queryValueColumn>timezone</queryValueColumn>
+</inputControl>

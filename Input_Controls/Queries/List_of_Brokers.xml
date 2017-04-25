@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<query exportedWithPermissions="true">
+    <folder>/Input_Controls/Queries</folder>
+    <name>List_of_Brokers</name>
+    <version>0</version>
+    <label>List of Brokers</label>
+    <description></description>
+    <creationDate>2017-02-16T17:56:42.511Z</creationDate>
+    <updateDate>2017-02-16T17:56:42.511Z</updateDate>
+    <language>sql</language>
+    <queryString>SELECT
+    id, name
+FROM
+    api_broker</queryString>
+    <dataSource>
+        <uri>/Datasources/panalocare</uri>
+    </dataSource>
+</query>

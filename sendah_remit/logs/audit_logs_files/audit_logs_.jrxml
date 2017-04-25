@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.0.final using JasperReports Library version 6.3.0  -->
+<!-- 2016-08-19T11:57:26 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Audit Log" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d193fb3b-05be-4cf7-b867-cee976502927">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sendah Remit"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<parameter name="start_datetime" class="java.sql.Timestamp"/>
+	<parameter name="end_datetime" class="java.sql.Timestamp"/>
+	<parameter name="timezone" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Asia/Manila"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+		id,
+		ip_address,
+		action,
+		message,
+		username,
+       date_created::TIMESTAMP AT TIME ZONE 'UTC' AT TIME ZONE $P{timezone} as date_created
+FROM
+		web_auditlog
+WHERE
+		date_created::TIMESTAMP AT TIME ZONE 'UTC' AT TIME ZONE $P{timezone} BETWEEN $P{start_datetime}
+		AND $P{end_datetime}]]>
+	</queryString>
+	<field name="id" class="java.lang.Integer"/>
+	<field name="ip_address" class="java.lang.String"/>
+	<field name="action" class="java.lang.String"/>
+	<field name="message" class="java.lang.String"/>
+	<field name="date_created" class="java.sql.Timestamp"/>
+	<field name="username" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="34" splitType="Stretch">
+			<staticText>
+				<reportElement x="5" y="0" width="510" height="13" uuid="1bfced49-5306-4880-9759-36fdba3aea92"/>
+				<textElement textAlignment="Left">
+					<font fontName="Arial" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sendah Remit Audit Logs]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="5" y="14" width="510" height="13" uuid="f4493097-323a-490e-9639-86f6381978ef">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font fontName="Arial" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Date: " + IF(EQUALS(DATEFORMAT($P{start_datetime}, "MMMM d, yyyy HH:mm:ss"),DATEFORMAT($P{end_datetime}, "MMMM d, yyyy HH:mm:ss")),DATEFORMAT($P{start_datetime}, "MMMM d, yyyy HH:mm:ss"),DATEFORMAT($P{start_datetime}, "MMMM d, yyyy HH:mm:ss") + " to " + DATEFORMAT($P{end_datetime}, "MMMM d, yyyy HH:mm:ss"))]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<staticText>
+				<reportElement mode="Opaque" x="220" y="1" width="78" height="18" forecolor="#211111" backcolor="#F7E9E6" uuid="d0c04160-2263-4280-be35-cafc86c96b12">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box leftPadding="3">
+					<topPen lineWidth="1.0" lineStyle="Double" lineColor="#CF9695"/>
+					<leftPen lineColor="#CF9695"/>
+					<bottomPen lineStyle="Solid" lineColor="#CF9695"/>
+					<rightPen lineColor="#CF9695"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[IP Address]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="87" y="1" width="134" height="18" forecolor="#211111" backcolor="#F7E9E6" uuid="6e60446e-a169-49fa-a8cc-c427628e39c4">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box leftPadding="3">
+					<topPen lineWidth="1.0" lineStyle="Double" lineColor="#CF9695"/>
+					<leftPen lineColor="#CF9695"/>
+					<bottomPen lineStyle="Solid" lineColor="#CF9695"/>
+					<rightPen lineColor="#CF9695"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Action]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="502" y="1" width="70" height="18" forecolor="#211111" backcolor="#F7E9E6" uuid="8c89e6d8-4232-455a-a5ec-7c16b7fd4a95">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Double" lineColor="#CF9695"/>
+					<leftPen lineColor="#CF9695"/>
+					<bottomPen lineStyle="Solid" lineColor="#CF9695"/>
+					<rightPen lineColor="#CF9695"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1" y="1" width="86" height="18" forecolor="#211111" backcolor="#F7E9E6" uuid="85475f26-5491-4965-a4cc-da0af3352d7c"/>
+				<box leftPadding="3">
+					<topPen lineWidth="1.0" lineStyle="Double" lineColor="#CF9695"/>
+					<leftPen lineColor="#CF9695"/>
+					<bottomPen lineStyle="Solid" lineColor="#CF9695"/>
+					<rightPen lineColor="#CF9695"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[User]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="298" y="1" width="204" height="18" forecolor="#211111" backcolor="#F7E9E6" uuid="2b48dbd6-e343-4426-a003-d01c07d1e0a6">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box leftPadding="3">
+					<topPen lineWidth="1.0" lineStyle="Double" lineColor="#CF9695"/>
+					<leftPen lineColor="#CF9695"/>
+					<bottomPen lineStyle="Solid" lineColor="#CF9695"/>
+					<rightPen lineColor="#CF9695"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Message]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="17" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="220" y="4" width="78" height="13" uuid="d83750ad-d2bc-4e3c-a2f1-d327f7774cbf">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box leftPadding="3"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ip_address}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="87" y="4" width="132" height="13" uuid="41ccd14d-6098-4ab5-b118-b82b9ad384ec">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box leftPadding="3"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{action}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="502" y="3" width="78" height="13" uuid="e3896b36-1255-4c3d-bc7e-8a825dd73f78"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{date_created}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="1" y="4" width="86" height="13" uuid="d470cb10-37f5-45bc-8bc4-342e8b42d000"/>
+				<box leftPadding="3"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{username}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="298" y="4" width="204" height="13" uuid="7eba6500-ef70-4ecb-9d13-63d68bb05dd2">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box leftPadding="3"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{message}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
