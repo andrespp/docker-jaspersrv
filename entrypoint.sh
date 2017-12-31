@@ -1,4 +1,6 @@
 #!/bin/bash
+
+# Sets script to fail if any command fails.
 set -e
 
 setup_jasperserver() {
@@ -21,10 +23,15 @@ setup_jasperserver() {
 
 run_jasperserver() {
     if [ ! -d "$CATALINA_HOME/webapps/jasperserver" ]; then
+
+	# Seed database
+        setup_jasperserver init-js-db-ce import-minimal-ce
+
+	# Deploy
         setup_jasperserver deploy-webapp-ce
     fi
 
-    sed -i -e "s|^org.owasp.csrfguard.TokenName.*$|org.owasp.csrfguard.TokenName=JASPER-CSRF-TOKEN|g;" $CATALINA_HOME/webapps/jasperserver/WEB-INF/esapi/Owasp.CsrfGuard.properties
+    #sed -i -e "s|^org.owasp.csrfguard.TokenName.*$|org.owasp.csrfguard.TokenName=JASPER-CSRF-TOKEN|g;" $CATALINA_HOME/webapps/jasperserver/WEB-INF/esapi/Owasp.CsrfGuard.properties
 
     exec catalina.sh run
 }
