@@ -4,8 +4,7 @@ MAINTAINER Andre Periera andrespp@gmail.com
 
 ENV JASPERSERVER_VERSION=6.4.2
 
-RUN apt-get update && apt-get install -y vim && rm -rf /var/lib/apt/lists/* && \
-    curl -SL https://downloads.sourceforge.net/project/jasperserver/JasperServer/JasperReports%20Server%20Community%20Edition%20$JASPERSERVER_VERSION/TIB_js-jrs-cp_`echo -n $JASPERSERVER_VERSION`_bin.zip -o /tmp/jasperserver.zip && \
+RUN    curl -SL https://downloads.sourceforge.net/project/jasperserver/JasperServer/JasperReports%20Server%20Community%20Edition%20$JASPERSERVER_VERSION/TIB_js-jrs-cp_`echo -n $JASPERSERVER_VERSION`_bin.zip -o /tmp/jasperserver.zip && \
     curl -SL https://jdbc.postgresql.org/download/postgresql-9.4.1208.jre7.jar -o $CATALINA_HOME/lib/postgresql-9.4.1208.jre7.jar && \
     unzip /tmp/jasperserver.zip -d /usr/src/ && \
     mv /usr/src/jasperreports-server-cp-$JASPERSERVER_VERSION-bin /usr/src/jasperreports-server && \
