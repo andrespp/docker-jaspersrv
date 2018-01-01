@@ -1,4 +1,3 @@
-#https://github.com/Ayannah/jasperserver-docker
 FROM tomcat:9-jre8
 MAINTAINER Andre Periera andrespp@gmail.com
 
@@ -11,6 +10,8 @@ RUN    curl -SL https://downloads.sourceforge.net/project/jasperserver/JasperSer
     rm -rf /tmp/*
 
 ENV CATALINA_OPTS="-server -Xmx1536m -XX:MaxPermSize=256m -XX:+TieredCompilation -XX:CompileThreshold=1500 -XX:-DontCompileHugeMethods -XX:+UseCodeCacheFlushing -XX:ReservedCodeCacheSize=256m -XX:+UseBiasedLocking -XX:BiasedLockingStartupDelay=0 -XX:NewRatio=3 -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+DisableExplicitGC -XX:+CMSIncrementalMode -XX:+CMSIncrementalPacing -XX:+CMSParallelRemarkEnabled -XX:+UseCompressedOops -XX:CMSInitiatingOccupancyFraction=30 -XX:+UseCMSInitiatingOccupancyOnly"
+
+#VOLUME /usr/local/tomcat/webapps/jasperserver
 
 COPY entrypoint.sh /
 ENTRYPOINT ["/entrypoint.sh"]

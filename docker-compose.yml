@@ -8,10 +8,11 @@ version: '3.1'
 
 services:
   jaspersrv:
-    build: .
+    image: andrespp/jaspersrv
+    #command: ["seed"]
     restart: always
     #volumes:
-    #- ./data/jasper-data:/bitnami
+    #- ./data/jasper-data:/usr/local/tomcat/webapps/jasperserver
     ports:
       - "80:8080"
     depends_on:

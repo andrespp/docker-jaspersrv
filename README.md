@@ -42,6 +42,18 @@ services:
       POSTGRES_PASSWORD: my-secret-password
 ```
 
+Access it on `http://localhost/jasperserver` user/pass `jasperadmin/jasperadmin`.
+
+On the first run, it is needed to seed the app's database. It can be done by running the command `seed`:
+
+```
+services:
+  jaspersrv:
+    image: andrespp/jaspersrv
+    command: ["seed"]
+    ...
+```
+
 # Environment variables
 
 This image uses several environment variables in order to control its behavior, and some of them may be required

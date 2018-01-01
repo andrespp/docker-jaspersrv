@@ -22,10 +22,9 @@ setup_jasperserver() {
 }
 
 run_jasperserver() {
-    if [ ! -d "$CATALINA_HOME/webapps/jasperserver" ]; then
-
-	# Seed database
-        setup_jasperserver init-js-db-ce import-minimal-ce
+    if [[ `ls -1 $CATALINA_HOME/webapps/jasperserver| wc -l` -le 1 \
+      || `ls -1 -v $CATALINA_HOME/webapps/jasperserver| head -n 1` \
+      =~ "WEB-INF.*" ]]; then
 
 	# Deploy
         setup_jasperserver deploy-webapp-ce
@@ -37,7 +36,7 @@ run_jasperserver() {
 }
 
 seed_database() {
-    setup_jasperserver create-js-db init-js-db-ce import-minimal-ce
+    setup_jasperserver init-js-db-ce import-minimal-ce
 }
 
 case "$1" in
