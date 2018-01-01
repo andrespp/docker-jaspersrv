@@ -11,7 +11,7 @@ RUN    curl -SL https://downloads.sourceforge.net/project/jasperserver/JasperSer
 
 ENV CATALINA_OPTS="-server -Xmx1536m -XX:MaxPermSize=256m -XX:+TieredCompilation -XX:CompileThreshold=1500 -XX:-DontCompileHugeMethods -XX:+UseCodeCacheFlushing -XX:ReservedCodeCacheSize=256m -XX:+UseBiasedLocking -XX:BiasedLockingStartupDelay=0 -XX:NewRatio=3 -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+DisableExplicitGC -XX:+CMSIncrementalMode -XX:+CMSIncrementalPacing -XX:+CMSParallelRemarkEnabled -XX:+UseCompressedOops -XX:CMSInitiatingOccupancyFraction=30 -XX:+UseCMSInitiatingOccupancyOnly"
 
-#VOLUME /usr/local/tomcat/webapps/jasperserver
+VOLUME /usr/local/tomcat/webapps
 
 COPY entrypoint.sh /
 ENTRYPOINT ["/entrypoint.sh"]

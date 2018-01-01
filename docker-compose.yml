@@ -11,8 +11,8 @@ services:
     image: andrespp/jaspersrv
     #command: ["seed"]
     restart: always
-    #volumes:
-    #- ./data/jasper-data:/usr/local/tomcat/webapps/jasperserver
+    volumes:
+    - ./data/jasper-data:/usr/local/tomcat/webapps
     ports:
       - "80:8080"
     depends_on:
